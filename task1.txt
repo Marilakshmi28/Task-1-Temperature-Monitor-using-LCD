@@ -1,0 +1,35 @@
+#include <LiquidCrystal.h>
+
+// LCD RS, E, D4, D5, D6, D7
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+// TMP36 analog pin
+const int sensorPin = A0;
+
+void setup() {
+  lcd.begin(16, 2); // Init LCD 16x2
+  Serial.begin(9600); // Init Serial
+  lcd.print("Temp Monitor"); 
+  delay(2000);
+  lcd.clear();              
+}
+
+void loop() {
+  int sensorValue = analogRead(sensorPin);
+  float voltage = sensorValue * (5.0 / 1023.0);
+  float temperatureC = (voltage - 0.5) * 100.0;
+  Serial.print("Temp: ");
+  Serial.print(temperatureC);
+  Serial.println(" C");
+  lcd.setCursor(0, 0);
+  lcd.print(" "); // Full clear line 1
+  lcd.setCursor(0, 0);
+  lcd.print("Temp (C): ");
+  lcd.print(temperatureC, 2); // 2 decimal places
+  lcd.setCursor(0, 1);
+  lcd.print(" "); // Full clear line 2
+  lcd.setCursor(0, 1);
+  lcd.print("Reading OK");
+
+  delay(1000); // 1 second delay
+}
